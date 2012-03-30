@@ -39,7 +39,7 @@ describe "Static pages" do
     let(:heading)    {'Contact'}
     let(:page_title) {'Contact'}
 
-    it_should_behave_like "all static pages"
+    it_should_behave_like "all static pages"   
   end
 
   it "should have the right links on the layout" do
