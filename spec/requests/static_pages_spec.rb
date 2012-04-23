@@ -29,6 +29,64 @@ describe "Static pages" do
           page.should have_selector("li##{item.id}", text: item.content)
         end
       end
+
+      describe "follower/following counts" do
+        let(:other_user) { FactoryGirl.create(:user) }
+        before do
+          other_user.follow!(user)
+          visit root_path
+        end
+
+        it { should have_link("0 following", href: following_user_path(user)) }
+        it { should have_link("1 follower",  href: followers_user_path(user)) }
+      end
+
+      describe "should count microposts" do
+        it {should have_selector("span", text: "2 microposts")}
+        
+        describe "should pluralize" do
+          before {click_link('delete')}
+          it {should have_selector("span", text: "1 micropost")}
+        end
+      end
+
+      describe "should paginate" do
+        before(:all) {60.times {FactoryGirl.create(:micropost, user: user)}}
+        after(:all) {Micropost.delete_all}
+
+        let(:first_page)  { Micropost.paginate(page: 1) }
+        let(:second_page) { Micropost.paginate(page: 2) }
+        it { should have_link('Next') }
+        its(:html) { should match('>2</a>') }
+
+        it "should list each micropost" do
+          Micropost.all[0..2].each do |micropost|
+            page.should have_content(micropost.content)
+          end
+        end
+
+        it "should list the first page of microposts" do
+          first_page.each do |micropost|
+            page.should have_content(micropost.content)
+          end
+        end
+
+        it "should not list the second page of microposts" do
+          second_page.each do |micropost|
+            page.should_not have_content(micropost.content)
+          end
+        end
+
+        describe "showing the second page" do
+          before { visit root_path(page: 2) }
+
+          it "should list the second page of microposts" do
+            second_page.each do |micropost|
+              page.should have_content(micropost.content)
+            end 
+          end
+        end
+      end
     end
   end
 
