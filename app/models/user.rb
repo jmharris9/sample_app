@@ -10,7 +10,7 @@
 #
 
 class User < ActiveRecord::Base
-	attr_accessible :name, :email, :password, :password_confirmation
+	attr_accessible :name, :email, :user_name, :password, :password_confirmation
 	has_secure_password
 	has_many :microposts, dependent: :destroy
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
@@ -19,17 +19,19 @@ class User < ActiveRecord::Base
 	has_many :reverse_relationships, foreign_key: "followed_id",
                                    class_name:  "Relationship",
                                    dependent:   :destroy
-  	has_many :followers, through: :reverse_relationships, source: :follower
+  has_many :followers, through: :reverse_relationships, source: :follower
 
 	validates :name, presence: true, length: {maximum:50}
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
 	 uniqueness: { case_sensitive: false } 
+  validates :user_name, presence: true, length: {within: 6..40}, uniqueness: true
 	validates :password, length: {minimum:6}
 	validates :password_confirmation, presence: true
 
   	def feed
-    	Micropost.from_users_followed_by(self)
+     Micropost.including_replies(self)
+      
   	end
 
   	def following?(other_user)

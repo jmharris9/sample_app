@@ -11,6 +11,7 @@ describe Micropost do
   it { should respond_to(:content) }
   it { should respond_to(:user_id) }
   it { should respond_to(:user) }
+  it { should respond_to(:in_reply_to)}
   its(:user) { should == user }
 
   it { should be_valid }
@@ -48,11 +49,30 @@ describe Micropost do
     let(:own_post)        {       user.microposts.create!(content: "foo") }
     let(:followed_post)   { other_user.microposts.create!(content: "bar") }
     let(:unfollowed_post) { third_user.microposts.create!(content: "baz") }
+   
 
     subject { Micropost.from_users_followed_by(user) }
 
     it { should include(own_post) }
     it { should include(followed_post) }
     it { should_not include(unfollowed_post) }
+
+
+    describe "and in_reply_to" do
+      let(:reply_user)  {FactoryGirl.create(:user)}
+      let(:reply_post)  {reply_user.microposts.create!(content: "@#{user.user_name} hi", in_reply_to: user.user_name)}
+      before {reply_post.parse_micropost}
+      subject { Micropost.including_replies(user) }
+
+      it { should include(reply_post) }
+
+      describe "but not in others feed" do
+
+        subject { Micropost.including_replies(other_user)}
+
+        it { should_not include(reply_post)}    
+      end
+    end
   end
+
 end

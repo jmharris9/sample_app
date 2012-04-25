@@ -13,13 +13,14 @@ require 'spec_helper'
 
 describe User do
   before do
-  @user = User.new(name: "Example User", email: "user@example.com", 
+  @user = User.new(name: "Example User", email: "user@example.com", user_name: "examuser",
             password: "foobar", password_confirmation: "foobar")
   end
   subject { @user }
 
-  it {should respond_to(:name)}
-  it {should respond_to(:email)}
+  it { should respond_to(:name)}
+  it { should respond_to(:email)}
+  it { should respond_to(:user_name)}
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
@@ -34,6 +35,7 @@ describe User do
   it { should respond_to(:followers) }
   it { should respond_to(:following?) }
   it { should respond_to(:follow!) }
+
   it { should be_valid }
   it { should_not be_admin }
 
@@ -87,6 +89,30 @@ describe User do
       user_with_same_email = @user.dup
       user_with_same_email.email = @user.email.upcase
       user_with_same_email.save
+    end
+    it { should_not be_valid }
+  end
+
+  describe "when username is not present" do
+    before { @user.user_name = " " }
+    it { should_not be_valid }
+  end
+
+  describe "when user_name is too long" do
+    before { @user.user_name = "a" * 41 }
+    it { should_not be_valid }
+  end
+
+  describe "when user_name is too short" do
+    before { @user.user_name = "a"* 5 }
+    it { should_not be_valid}
+  end
+
+  describe "when username address is already taken" do
+    before do
+      user_with_same_username = @user.dup
+      user_with_same_username.user_name = @user.user_name.upcase
+      user_with_same_username.save
     end
     it { should_not be_valid }
   end
@@ -177,14 +203,28 @@ describe User do
   end
 
   describe "following" do
-    let(:other_user) { FactoryGirl.create(:user) }    
+    let(:other_user) { FactoryGirl.create(:user) } 
+    let(:other_user2) {FactoryGirl.create(:user)}   
     before do
       @user.save
       @user.follow!(other_user)
+      @user.follow!(other_user2)
     end
 
     it { should be_following(other_user) }
     its(:followed_users) { should include(other_user) }
+    
+    it "should destroy associated relationships" do
+      followers = @user.followers
+      followed_users = @user.followed_users
+      @user.destroy
+      followers.each do |follower|
+        Follower.find_by_id(follower_id).should be_nil
+      end
+      followed_users.each do |following|
+        Following.find_by_id(following_id).should be_nil
+      end
+    end 
 
     describe "and unfollowing" do
       before { @user.unfollow!(other_user) }

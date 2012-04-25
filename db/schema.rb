@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120418165820) do
+ActiveRecord::Schema.define(:version => 20120423203018) do
 
   create_table "microposts", :force => true do |t|
     t.string   "content"
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "in_reply_to"
   end
 
   create_table "relationships", :force => true do |t|
@@ -39,9 +40,11 @@ ActiveRecord::Schema.define(:version => 20120418165820) do
     t.string   "password_digest"
     t.string   "remember_token"
     t.boolean  "admin",           :default => false
+    t.string   "user_name"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
+  add_index "users", ["user_name"], :name => "index_users_on_user_name", :unique => true
 
 end
