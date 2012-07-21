@@ -3,5 +3,5 @@
   <span class="user">
     <%= link_to feed_item.user.name, feed_item.user %>
   </span>
-  <%= render 'shared/delete_micropost', :item => feed_item %>
+  <%= render 'shared/render_item', item: feed_item %>
 </li>

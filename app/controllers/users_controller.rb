@@ -21,10 +21,12 @@ class UsersController < ApplicationController
       redirect_to root_path
     else
       @user = User.new(params[:user])
+      #check to see if the user already has a valid registration confirmation -> tell them to check email or resend
+      #else
       if @user.save
-        sign_in @user
-        flash[:success] = "Welcome to the Sample App!"
-        redirect_to @user
+        flash[:success] = "Registration Confirmation Sent: Please check your email"
+        @user.send_registration_confirmation
+        redirect_to root_path
       else
         render 'new'
       end
@@ -45,7 +47,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.search(params[:search]).paginate(page: params[:page])
   end
 
   def destroy
@@ -53,6 +55,8 @@ class UsersController < ApplicationController
     flash[:success] = "User destroyed."
     redirect_to users_path
   end
+
+
 
   def following
     @title = "Following"
@@ -67,7 +71,6 @@ class UsersController < ApplicationController
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
   end
-
 
 
   private

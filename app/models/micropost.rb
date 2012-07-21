@@ -11,14 +11,12 @@ class Micropost < ActiveRecord::Base
   scope :from_users_followed_by,  lambda { |user| followed_by(user) }
   scope :including_replies,       lambda { |user| included_replies(user)}
 
+  scope :search, lambda { |val|  where("content LIKE ?", "%#{val}%") }
+
   def parse_micropost
-    if  self.content.to_s =~ /\A\@/
-        user_regex = /\A\S+/.match(self.content).to_s
-        user_regex = user_regex[1..-1]
-        self.in_reply_to = user_regex
-    else
-      self.in_reply_to = []
-    end
+      user_regex = /\A\S+/.match(self.content).to_s
+      user_regex = user_regex[1..-1]
+      self.in_reply_to = user_regex
   end
 
   private

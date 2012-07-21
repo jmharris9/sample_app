@@ -1,6 +1,10 @@
 <% if @feed_items.any? %>
-  <ol class="microposts">
+  <ol class="microposts" id="feed_content">
+  	<div id="tester">
     <%= render partial: 'shared/feed_item', collection: @feed_items %>
+    </div id="tester">
   </ol>
+  <span id="update_paginate">
   <%= will_paginate @feed_items %>
+  </span>
 <% end %>

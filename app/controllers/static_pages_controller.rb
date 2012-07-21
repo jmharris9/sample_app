@@ -2,7 +2,18 @@ class StaticPagesController < ApplicationController
   def home
     if signed_in?
       @micropost  = current_user.microposts.build
-      @feed_items = current_user.feed.paginate(page: params[:page])
+      @message = current_user.messages.build
+      @feed_items = current_user.feed.search(params[:search]).paginate(page: params[:page])
+      @message_feed_items = current_user.message_feed.paginate(page: params[:page])
+    end
+  end
+  
+  def message_feed
+    @message = current_user.messages.build
+    @message_feed_items = current_user.message_feed.paginate(page: params[:page])
+    respond_to do |format|
+      format.html
+      format.js
     end
   end
 
@@ -14,4 +25,6 @@ class StaticPagesController < ApplicationController
 
   def contact
   end
+
+  
 end

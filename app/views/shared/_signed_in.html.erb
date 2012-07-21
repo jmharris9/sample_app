@@ -10,8 +10,16 @@
         <%= render 'shared/micropost_form' %>
       </section>
     </aside>
-    <div class="span8">
-      <h3>Micropost Feed</h3>
+    <div class="span8" id="microposts">
+      <h3 id="feed_label">Micropost Feed</h3>
+
+      <%= form_tag root_path, :method => 'get' do %>
+        <p>
+          <%= text_field_tag :search, params[:search] %>
+          <%= submit_tag "Search", :name => nil %>
+        </p>
+      <% end %>
+
       <%= render 'shared/feed' %>
     </div>
   </div>  

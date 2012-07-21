@@ -6,12 +6,18 @@ FactoryGirl.define do
     password "foobar"
     password_confirmation "foobar"
  	
- 	factory :admin do
+ 	  factory :admin do
       admin true
     end
   end
+
   factory :micropost do
     sequence(:content) { |n| "Lorem ipsum #{n}" }
+    user
+  end
+  
+  factory :message do
+    sequence(:content) { |n| "d Lorem ipsum #{n}" }
     user
   end
 end

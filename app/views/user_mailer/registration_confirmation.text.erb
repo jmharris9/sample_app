@@ -1,0 +1,7 @@
+<%= @user.name%>,
+
+To confirm your registration please click the folloiwing link:
+
+<%= edit_registration_confirmation_url(@user.registration_confirmation_token) %>
+
+If you did not signup please disreguard.

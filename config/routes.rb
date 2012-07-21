@@ -1,14 +1,23 @@
 SampleApp::Application.routes.draw do
+  get "registration_confirmations/new"
+
+  get "password_resets/new"
+
   resources :users do
     member do
       get :following, :followers
     end
   end
+
   resources :sessions, only: [:new, :create, :destroy]
-  resources :microposts, only: [:create, :destroy]
+  resources :microposts, only: [:create, :destroy, :index]
+  resources :messages, only: [:create, :destroy,]
   resources :relationships, only: [:create, :destroy]
-  
+  resources :password_resets
+  resources :registration_confirmations
+
   root to: 'static_pages#home'
+  match '/message_feed', to: 'static_pages#message_feed'
   match '/signup', to: 'users#new'
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete
@@ -64,7 +73,6 @@ SampleApp::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-   root :to => 'static_pages#home'
 
   # See how all your routes lay out with "rake routes"
 

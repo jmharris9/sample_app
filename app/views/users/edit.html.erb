@@ -5,6 +5,8 @@
   <div class="span6 offset3">
    <%= form_for(@user) do |f| %>
       <%= render 'fields', f: f %>
+      <%= f.check_box :notifications %>
+	 <%= f.label :notifications, "Check if you would like to recieve email notifications" %>
       <%= f.submit "Save changes", :class => "btn btn-large btn-primary" %>
     <% end %>
 

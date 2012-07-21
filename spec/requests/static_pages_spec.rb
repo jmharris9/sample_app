@@ -46,11 +46,12 @@ describe "Static pages" do
         
         describe "should pluralize" do
           before {click_link('delete')}
+
           it {should have_selector("span", text: "1 micropost")}
         end
       end
 
-      describe "should paginate" do
+      describe "should paginate microposts" do
         before(:all) {60.times {FactoryGirl.create(:micropost, user: user)}}
         after(:all) {Micropost.delete_all}
 
@@ -87,6 +88,28 @@ describe "Static pages" do
           end
         end
       end
+
+      describe "messages" do
+        before do
+          FactoryGirl.create(:message, user: user, content: "hihi")
+          FactoryGirl.create(:message, user: user, content: "second message")
+        end
+
+        it {should have_selector('message links', text: 'messages')}
+        
+        describe "link should work" do
+          before {click_link('3 messages')}
+          it {should have_selector("h3"), text: "Messages"}
+        end
+
+
+        it "should render the user's message_feed" do
+          user.message_feed.each do |item|
+            page.should have_selector("li##(item.id)", text: item.content)
+          end
+        end
+      end
+
     end
   end
 

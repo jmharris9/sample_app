@@ -1,0 +1,6 @@
+
+$("#feed_label").html('<h3>Messages<h3>')
+$("#feed_content").html("<%= escape_javascript(render(partial: 'shared/feed_item', collection: @message_feed_items)) %>")
+$("#update_paginate").html("<%= escape_javascript(will_paginate(@message_feed_items)) %>")
+$("#feed_content").attr('id', 'message_feed_content')
+$("#message_feed_content").html("<%= escape_javascript(render(partial: 'shared/feed_item', collection: @message_feed_items)) %>")

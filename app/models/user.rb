@@ -8,11 +8,34 @@
 #  created_at :datetime        not null
 #  updated_at :datetime        not null
 #
+require 'state_machine'
 
 class User < ActiveRecord::Base
-	attr_accessible :name, :email, :user_name, :password, :password_confirmation
+
+  state_machine :confirmed_state, :initial => :unconfirmed do
+    
+    state :unconfirmed do
+      def confirmed?
+        false
+      end
+    end
+
+    state :confirmed do
+      def confirmed?
+        true
+      end
+    end
+
+    event :confirm do 
+      transition :unconfirmed => :confirmed
+    end
+
+  end
+
+	attr_accessible :name, :email, :user_name, :password, :password_confirmation, :notifications
 	has_secure_password
 	has_many :microposts, dependent: :destroy
+  has_many :messages, dependent: :destroy
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
 	has_many :followed_users, through: :relationships, source: :followed
 	before_save :create_remember_token
@@ -26,13 +49,19 @@ class User < ActiveRecord::Base
 	validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
 	 uniqueness: { case_sensitive: false } 
   validates :user_name, presence: true, length: {within: 6..40}, uniqueness: true
-	validates :password, length: {minimum:6}
-	validates :password_confirmation, presence: true
+	validates_presence_of :password, length: {minimum:6}, on: :create
+	validates_presence_of :password_confirmation, presence: true, on: :create
+
+  scope :search, lambda { |val|  where("name LIKE ?", "%#{val}%") }
+  
 
   	def feed
      Micropost.including_replies(self)
-      
   	end
+
+    def message_feed
+     Message.user_messages(self)
+    end
 
   	def following?(other_user)
     	relationships.find_by_followed_id(other_user.id)
@@ -45,6 +74,26 @@ class User < ActiveRecord::Base
   	def unfollow!(other_user)
     	relationships.find_by_followed_id(other_user.id).destroy
   	end
+
+    def send_password_reset
+      generate_token(:password_reset_token)
+      self.password_reset_sent_at = Time.zone.now
+      save!
+      UserMailer.password_reset(self).deliver
+    end
+
+    def send_registration_confirmation
+      generate_token(:registration_confirmation_token)
+      self.registration_confirmation_sent_at = Time.zone.now
+      save!
+      UserMailer.registration_confirmation(self).deliver
+    end
+
+    def generate_token(column)
+      begin
+        self[column] = SecureRandom.urlsafe_base64
+      end while User.exists?(column => self[column])
+    end
 
 private
 

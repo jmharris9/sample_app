@@ -5,9 +5,14 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by_email(params[:email])
-    if user && user.authenticate(params[:password])
-      sign_in user
-      redirect_back_or user
+    if user && user.authenticate(params[:password]) 
+      if user.confirmed?
+        sign_in user
+        redirect_back_or user
+      else
+        flash.now[:error] = "Account Unconfirmed. Please active your account via the email sent to you"
+        render 'new'
+      end
     else
       flash.now[:error] = 'Invalid email/password combination'
       render 'new'
