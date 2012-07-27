@@ -7,6 +7,9 @@
 <span>
   <%= link_to "view my profile", current_user %>
 </span>
+<span>
+  <%= link_to "view my stocks", stocks_path%>
+</span>
 <span id="message links">
 	<%= link_to pluralize(current_user.message_feed.count, "message"), message_feed_path(id: current_user.id), remote: true%>
 </span>

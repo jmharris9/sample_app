@@ -1,0 +1,51 @@
+<h1><%= @stock.name%></h1>
+
+<h2>Income Statement</h2>
+<%= link_to '10-K', "http://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=#{@stock.symbol}&type=10-k&dateb=&owner=exclude&count=40" %>
+<table class="data">
+<thead>	
+	<th></th>
+	<th>2008</th>
+	<th>2009</th>
+	<th>2010</th>
+	<th>2011</th>
+	<th>2012</th>
+</thead>
+<tbody>
+	<%= render @income_statement %>
+</tbody>
+</table>
+
+<h2>Balance Sheet</h2>
+
+<table class="data">
+<thead>
+	<th></th>
+	<th>2008</th>
+	<th>2009</th>
+	<th>2010</th>
+	<th>2011</th>
+	<th>2012</th>
+</thead>
+
+<tbody>
+	<%= render @balance_sheet %>
+</tbody>
+</table>
+
+<h2>Cash Flow</h2>
+
+<table class="data">
+
+<thead>
+	<th></th>
+	<th>2008</th>
+	<th>2009</th>
+	<th>2010</th>
+	<th>2011</th>
+	<th>2012</th>
+</thead>
+<tbody>
+	<%= render @cash_flow %>
+</tbody>
+</table>

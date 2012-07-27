@@ -1,6 +1,5 @@
 SampleApp::Application.routes.draw do
   get "registration_confirmations/new"
-
   get "password_resets/new"
 
   resources :users do
@@ -15,6 +14,7 @@ SampleApp::Application.routes.draw do
   resources :relationships, only: [:create, :destroy]
   resources :password_resets
   resources :registration_confirmations
+  resources :stocks
 
   root to: 'static_pages#home'
   match '/message_feed', to: 'static_pages#message_feed'
@@ -23,7 +23,7 @@ SampleApp::Application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: :delete
   match '/help',    to: 'static_pages#help'
   match '/about',   to: 'static_pages#about'
-  match '/contact', to: 'static_pages#contact'
+  match '/contact', to: 'static_pages#contact' 
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

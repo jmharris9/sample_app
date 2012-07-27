@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628051950) do
+ActiveRecord::Schema.define(:version => 20120726025323) do
+
+  create_table "line_items", :force => true do |t|
+    t.string   "name"
+    t.float    "yr0"
+    t.float    "yr1"
+    t.float    "yr2"
+    t.float    "yr3"
+    t.float    "yr4"
+    t.float    "start_year"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "stock_id"
+  end
 
   create_table "messages", :force => true do |t|
     t.string   "content"
@@ -41,6 +54,14 @@ ActiveRecord::Schema.define(:version => 20120628051950) do
   add_index "relationships", ["followed_id"], :name => "index_relationships_on_followed_id"
   add_index "relationships", ["follower_id", "followed_id"], :name => "index_relationships_on_follower_id_and_followed_id", :unique => true
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
+
+  create_table "stocks", :force => true do |t|
+    t.string   "name"
+    t.string   "symbol"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"

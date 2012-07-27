@@ -1,0 +1,6 @@
+<%= form_for @stock, :url => {:action => :create} do |f| %>
+	<%= f.label :name %>
+	<%= f.text_field :name %>
+
+	<%= f.submit "Create new stock", class: "btn btn-large btn-primary"%>
+<% end %>

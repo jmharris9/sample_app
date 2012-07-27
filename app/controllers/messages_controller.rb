@@ -20,11 +20,6 @@ class MessagesController < ApplicationController
     respond_with(@messages) 
   end
 
-  def tester
-    @messages = current_user.messages.all
-    respond_with(@messages)
-  end
-
 private
 
     def correct_user
