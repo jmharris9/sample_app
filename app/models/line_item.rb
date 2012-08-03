@@ -1,18 +1,76 @@
 class LineItem < ActiveRecord::Base
-	attr_accessible :name, :yr0, :yr1, :yr2, :yr3, :yr4, :start_year
-	belongs_to :stock
+	attr_accessible :name, :yr0, :yr1, :yr2, :yr3, :yr4, :yr5, :yr6, :yr7, :yr8, :yr9
+	belongs_to :data_model, :polymorphic => true
 
 	default_scope order: 'line_items.created_at ASC'
 
 	scope :income_statement, lambda { |stock| income_statement(stock)}
 	scope :balance_sheet, lambda { |stock| balance_sheet(stock)}
 	scope :cash_flow, lambda { |stock| cash_flow(stock)}
-	scope :all, lambda { |stock| all(stock)}
+	
+
+	def five_yr_average
+		return (self.yr0+self.yr1+self.yr2+self.yr3+self.yr4)/5
+		
+	end
+
+	def copy_data(new_line)
+		a = self.year_values
+		b = new_line.year_array
+		i=0
+		a.each do |yr|
+			new_line.update_attribute(b[i],a[i])
+			i=i+1
+		end
+	end
+
+	def sum!
+		return (self.yr9+ self.yr8+ self.yr7+ self.yr6+ self.yr5+ self.yr4+ self.yr3+ self.yr2+ self.yr1+ self.yr0)
+	end
+
+	def year_array
+		return [:yr9, :yr8, :yr7, :yr6, :yr5, :yr4, :yr3, :yr2, :yr1, :yr0]
+	end
+
+	def year_values
+		return [self.yr9, self.yr8, self.yr7, self.yr6, self.yr5, self.yr4, self.yr3, self.yr2, self.yr1, self.yr0] 
+	end
+
+	def add!(x)
+		a = self.year_array
+		b = self.year_values
+		i=0
+		while i<a.length
+			self.update_attribute(a[i],b[i]+x)
+			i=i+1
+		end
+	end
+
+	def multiply!(x)
+		a = self.year_array
+		b = self.year_values
+		i=0
+		while i<a.length
+			self.update_attribute(a[i],b[i]*x)
+			i=i+1
+		end
+	end
+
+	def divide!(line_name)
+		line = data_model.get_line(line_name)
+		a = self.year_array
+		b = self.year_values
+		c = line.year_values
+		i=0
+		while i<a.length
+			self.update_attribute(a[i],c[i]/b[i])
+			i=i+1
+		end
+	end
+
 
 	private
-		def self.all(stock)
-			select('*')
-		end
+		
 		def self.income_statement(stock)
 			income_statement_lines = Array.new
 			income_statement_lines = ["Operating Revenue",
@@ -43,8 +101,8 @@ class LineItem < ActiveRecord::Base
 				"Income From Cum. Effect Of Acct. Change",
 				"Income From Tax Loss Carryforward",
 				"Other Gains/Losses",
-				"Total Net Income",]
-			where(self.arel_table[:name].in(income_statement_lines))
+				"Total Net Income"]
+			where(:name =>income_statement_lines, :data_model_id => stock.id, :data_model_type =>"Stock")
 		end
 
 		def self.balance_sheet(stock)
@@ -84,8 +142,8 @@ class LineItem < ActiveRecord::Base
 				"Preferred Secur. Of Subsid. Trust",
 				"Preferred Equity Outside Stock Equity",
 				"Total Liabilities",
-				"Total Equity",]
-			where(self.arel_table[:name].in(balance_sheet_lines))
+				"Total Equity"]
+			where(:name =>balance_sheet_lines, :data_model_id => stock.id, :data_model_type =>"Stock")
 		end
 
 		def self.cash_flow(stock)
@@ -114,8 +172,8 @@ class LineItem < ActiveRecord::Base
 				"Payment Of Cash Dividends",
 				"Other Financing Charges, Net",
 				"Cash From Discontinued Financing Activities",
-				"Net Cash From Financing Activities",]
-			where(self.arel_table[:name].in(cash_flow_lines))
+				"Net Cash From Financing Activities"]
+			where(:name => cash_flow_lines, :data_model_id => stock.id, :data_model_type =>"Stock")
 		end
 
 end

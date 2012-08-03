@@ -1,0 +1,261 @@
+%h2 
+	=@dcf.name 
+	*
+	=@stock.name
+=link_to "DCFS", stock_dcfs_path(@stock)
+%h2 
+	Discounted Free Cash Flow Analysis
+%table.data
+	%thead	
+		%th
+		%th 
+			=@stock.start_year-9
+		%th 
+			=@stock.start_year-8
+		%th 
+			=@stock.start_year-7
+		%th 
+			=@stock.start_year-6
+		%th 
+			=@stock.start_year-5
+		%th 
+			=@stock.start_year-4
+		%th 
+			=@stock.start_year-3
+		%th 
+			=@stock.start_year-2
+		%th 
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year
+	%tbody
+		=render @line_items
+
+%table.data
+	%thead	
+		%th
+		%th 
+			=@stock.start_year+1
+		%th 
+			=@stock.start_year+2
+		%th 
+			=@stock.start_year+3
+		%th 
+			=@stock.start_year+4
+		%th 
+			=@stock.start_year+5
+		%th 
+			=@stock.start_year+6
+		%th 
+			=@stock.start_year+7
+		%th 
+			=@stock.start_year+8
+		%th 
+			=@stock.start_year+9
+		%th 
+			=@stock.start_year+10
+	%tbody 
+		=render @projections
+
+%p 
+	Value from formula:
+	=@dcf.value
+%p 
+	Discount (based on formula):
+	=@discount
+	\%
+%p 
+	Value from summed values:
+	=@value2
+
+%h2
+	Ben Graham Formula
+
+%table.data
+	%thead	
+		%th
+		%th 
+			=@stock.start_year-9 
+			-  
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year-8 
+			-
+			=@stock.start_year
+		%th 
+			=@stock.start_year-9
+			- 
+			=@stock.start_year-2
+		%th 
+			=@stock.start_year-8
+			- 
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year-7
+			-
+			=@stock.start_year
+		%th 
+			=@stock.start_year-9
+			-
+			=@stock.start_year-4
+		%th 
+			=@stock.start_year-8 
+			-  
+			=@stock.start_year-3
+		%th 
+			=@stock.start_year-7 
+			- 
+			=@stock.start_year-2
+		%th 
+			=@stock.start_year-6 
+			- 
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year-5 
+			- 
+			=@stock.start_year
+	%tbody 
+		=render @eps
+
+%p 
+	10 Year EPS Average Growth: 
+	=@ten_year_eps_av
+	\%
+%p
+	5 year EPS Average Growth:
+	=@five_year_eps_av
+	\%
+%p 
+	Average CROIC
+	=@croic_av
+	\%
+%p
+	20yr AAA Corporate Bond Rate:
+	=@aaa_bond
+	\%
+%p
+	eps =
+	=@eps_num
+
+%h3
+	Ben Graham Value Formula = EPS(7+1.5*growth_rate)*4.4/20 yr AAA bond rate
+	=@bg
+
+%h2
+	Net Net Asset Value
+%table.data
+	%thead	
+		%th
+		%th 
+			=@stock.start_year-9
+		%th 
+			=@stock.start_year-8
+		%th 
+			=@stock.start_year-7
+		%th 
+			=@stock.start_year-6
+		%th 
+			=@stock.start_year-5
+		%th 
+			=@stock.start_year-4
+		%th 
+			=@stock.start_year-3
+		%th 
+			=@stock.start_year-2
+		%th 
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year
+	%tbody
+		=render @nnav
+
+%h2
+	Piotroski Formula Value:
+%table.data
+	%thead	
+		%th
+		%th 
+			=@stock.start_year-9
+		%th 
+			=@stock.start_year-8
+		%th 
+			=@stock.start_year-7
+		%th 
+			=@stock.start_year-6
+		%th 
+			=@stock.start_year-5
+		%th 
+			=@stock.start_year-4
+		%th 
+			=@stock.start_year-3
+		%th 
+			=@stock.start_year-2
+		%th 
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year
+	%tbody
+		=render @p_value
+
+%h2
+	Altman Z Score:
+%table.data
+	%thead	
+		%th
+		%th 
+			=@stock.start_year-9
+		%th 
+			=@stock.start_year-8
+		%th 
+			=@stock.start_year-7
+		%th 
+			=@stock.start_year-6
+		%th 
+			=@stock.start_year-5
+		%th 
+			=@stock.start_year-4
+		%th 
+			=@stock.start_year-3
+		%th 
+			=@stock.start_year-2
+		%th 
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year
+	%tbody
+		=render @altz
+		=render @altzn
+
+%p Manufcaturing: Bankrupt < 1.8 < 2 years to Bankrupt <2.7< safe
+%p Non-manufacturing: Bankrupt <1.1 < grey area < 2.7 safe< 3<very save
+
+%h2
+	Beneish M Score:
+%table.data
+	%thead	
+		%th
+		%th 
+			=@stock.start_year-9
+		%th 
+			=@stock.start_year-8
+		%th 
+			=@stock.start_year-7
+		%th 
+			=@stock.start_year-6
+		%th 
+			=@stock.start_year-5
+		%th 
+			=@stock.start_year-4
+		%th 
+			=@stock.start_year-3
+		%th 
+			=@stock.start_year-2
+		%th 
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year
+	%tbody
+		=render @benm
+		=render @benmfive
+
+%p A score greater than -2.2 means there is a strong likelihood that a firm is manipulating its earnings

@@ -1,0 +1,19 @@
+=provide :title, 'Stocks'
+%h1 Stocks
+=form_for @stock do |f| 
+	= f.label :symbol
+	= f.text_field :symbol
+
+	= f.submit "Create new stock", class: "btn btn-large btn-primary"
+
+=form_tag stocks_path, :method => 'get' do 
+	%p
+		= text_field_tag :search, params[:search]
+		= submit_tag "Search", :name => nil
+	
+= will_paginate
+
+%ul.users
+= render @stocks
+
+= will_paginate

@@ -1,0 +1,5 @@
+%li
+	= stock.price
+	= link_to stock.symbol.upcase, stock
+	= link_to stock.name, stock
+	= link_to "delete", stock, method:  :delete, confirm: "You sure?"

@@ -8,13 +8,16 @@ SampleApp::Application.routes.draw do
     end
   end
 
+  resources :stocks do 
+    resources :dcfs
+  end
+
   resources :sessions, only: [:new, :create, :destroy]
   resources :microposts, only: [:create, :destroy, :index]
   resources :messages, only: [:create, :destroy,]
   resources :relationships, only: [:create, :destroy]
-  resources :password_resets
-  resources :registration_confirmations
-  resources :stocks
+  resources :password_resets, :registration_confirmations
+  
 
   root to: 'static_pages#home'
   match '/message_feed', to: 'static_pages#message_feed'

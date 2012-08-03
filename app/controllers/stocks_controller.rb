@@ -4,6 +4,8 @@ class StocksController < ApplicationController
     @stock = current_user.stocks.build(params[:stock])
     if @stock.save
       @stock.grab_data
+      @stock.owners_earnings
+      @stock.croic
       redirect_to stock_path(@stock)
     end
   end

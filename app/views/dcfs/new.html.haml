@@ -1,0 +1,58 @@
+=provide :title, 'DCF'
+%h2 Discounted Free Cash Flow 
+
+=form_for ([@stock, @dcf]) do |f|
+	=f.label :name
+	=f.text_field :name
+
+	=f.label :growth_rate
+	=f.text_field :growth_rate
+
+	=f.label :discount_rate
+	=f.text_field :discount_rate
+
+	=f.submit "Create new DCF", class: "btn btn-large btn-primary"
+
+%table.data
+	%thead	
+		%th
+		%th 
+			=@stock.start_year-9
+		%th 
+			=@stock.start_year-8
+		%th 
+			=@stock.start_year-7
+		%th 
+			=@stock.start_year-6
+		%th 
+			=@stock.start_year-5
+		%th 
+			=@stock.start_year-4
+		%th 
+			=@stock.start_year-3
+		%th 
+			=@stock.start_year-2
+		%th 
+			=@stock.start_year-1
+		%th 
+			=@stock.start_year
+	%tbody 
+		=render @line_items
+
+
+
+
+%h3 Owners Earnings Calculation=
+%p Total Net Income
+%p +Depreciation
+%p +Change in working capital 
+%p +other non cash items
+%p -5-10 yr average capex
+
+%h3 CROIC Calculation = 
+%p Owners Earnings/
+%p Total Equity
+%p +Total Liabilities
+%p -Current Liabilities
+%p -Total Cash - current liab in excess of current assets
+

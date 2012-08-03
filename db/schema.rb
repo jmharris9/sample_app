@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120726025323) do
+ActiveRecord::Schema.define(:version => 20120731123007) do
+
+  create_table "dcfs", :force => true do |t|
+    t.float    "growth_rate"
+    t.float    "discount_rate"
+    t.string   "name"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "stock_id"
+    t.float    "value"
+  end
 
   create_table "line_items", :force => true do |t|
     t.string   "name"
@@ -20,10 +30,15 @@ ActiveRecord::Schema.define(:version => 20120726025323) do
     t.float    "yr2"
     t.float    "yr3"
     t.float    "yr4"
-    t.float    "start_year"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "stock_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.float    "yr5"
+    t.float    "yr6"
+    t.float    "yr7"
+    t.float    "yr8"
+    t.float    "yr9"
+    t.string   "data_model_type"
+    t.integer  "data_model_id"
   end
 
   create_table "messages", :force => true do |t|
@@ -61,6 +76,8 @@ ActiveRecord::Schema.define(:version => 20120726025323) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.float    "price"
+    t.integer  "start_year"
   end
 
   create_table "users", :force => true do |t|

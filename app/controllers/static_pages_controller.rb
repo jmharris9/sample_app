@@ -5,6 +5,8 @@ class StaticPagesController < ApplicationController
       @message = current_user.messages.build
       @feed_items = current_user.feed.search(params[:search]).paginate(page: params[:page])
       @message_feed_items = current_user.message_feed.paginate(page: params[:page])
+      @stocks = current_user.stocks.search(params[:search]).paginate(page: params[:page])
+      @stock  = current_user.stocks.build
     end
   end
   

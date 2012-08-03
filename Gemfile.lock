@@ -92,6 +92,7 @@ GEM
     guard-spork (0.3.2)
       guard (>= 0.8.4)
       spork (>= 0.8.4)
+    haml (3.1.6)
     hike (1.2.1)
     i18n (0.6.0)
     journey (1.0.1)
@@ -196,6 +197,7 @@ DEPENDENCIES
   growl (= 1.0.3)
   guard-rspec (= 0.5.5)
   guard-spork (= 0.3.2)
+  haml
   jquery-datatables-rails!
   jquery-rails (= 2.0.0)
   pg (= 0.12.2)
