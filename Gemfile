@@ -25,7 +25,7 @@ group :assets do
   gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
 end
 
-gem 'jquery-rails', '2.0.0'
+gem 'jquery-rails', '3.1.5'
 
 # Test gems on Macintosh OS X
 group :test do
